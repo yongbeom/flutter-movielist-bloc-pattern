@@ -1,17 +1,16 @@
-import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:movielist/data/model/movie.dart';
+import 'base_api_service.dart';
+import 'app_exception.dart';
 import 'package:http/http.dart' as http;
 
-import 'app_exception.dart';
-
-class MovieApiProvider {
+class NetworkApiService extends BaseApiService {
   final _apiKey = '8fee0b816cb27174e13ebae2eb9c1ec5';
 
-  Future<MoiveResult> fetchMovieList() async {
-    MoiveResult responseJson;
+  @override
+  Future fetchMovieList() async {
+    dynamic responseJson;
     try {
       var uri = Uri.parse('http://api.themoviedb.org/3/movie/popular?api_key=$_apiKey');
       final response = await http.get(uri);
@@ -28,10 +27,11 @@ class MovieApiProvider {
     return responseJson;
   }
 
-  MoiveResult returnResponse(http.Response response) {
+  dynamic returnResponse(http.Response response) {
     switch (response.statusCode) {
       case 200:
-        return MoiveResult.fromJson(json.decode(response.body));
+        dynamic responseJson = jsonDecode(response.body);
+        return responseJson;
       case 400:
         throw BadRequestException(response.toString());
       case 401:
