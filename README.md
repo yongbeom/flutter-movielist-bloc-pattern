@@ -1,6 +1,6 @@
 # movielist
 
-A new Flutter project.
+BLOC 패턴을 사용한 Flutter 샘플
 
 ## Getting Started
 
